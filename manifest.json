@@ -1,0 +1,8 @@
+{
+  "short_name": "Weather",
+  "name": "McMillan Home Weather Station",
+  "start_url": "/",
+  "display": "fullscreen",
+  "background_color": "#fff",
+  "icons": { "128": "ing/windmill-logo.png"},
+}

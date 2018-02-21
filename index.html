@@ -1,0 +1,331 @@
+<html>  
+  <head>      
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Home Weather Station</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .flashtext {
+        font-size:7em;
+        font-weight:bold;
+      }
+      .currentdate {
+        font-size:1.2em;
+      }
+      #currentwindchill {
+        font-size:1em; !important
+      }
+      h3 {
+        text-transform:uppercase;
+        font-weight:bold;
+      }
+      #windmill-animation {
+        top: 13px;
+        position: relative;
+        opacity:.2;
+      }
+      #base {
+        width: 52.2px;
+        height: 80px;
+        float: right;
+        left: 65.1px;
+        position: relative;
+        z-index: 1;
+      }
+      #blades {
+         float: right;
+          position: relative;
+          width: 80px;
+          height: 80px;
+          z-index: 2;
+          top: -22px;
+      }
+      .spin-extra-fast {
+        -webkit-animation: spin .4s linear infinite;
+         -moz-animation: spin .4s linear infinite;
+         animation: spin .4s linear infinite;
+      }
+      .spin-fast {
+        -webkit-animation: spin .8s linear infinite;
+         -moz-animation: spin .8s linear infinite;
+         animation: spin .8s linear infinite;
+      }
+      .spin-medium {
+        -webkit-animation: spin 1.2s linear infinite;
+         -moz-animation: spin 1.2s linear infinite;
+         animation: spin 1.2s linear infinite;
+      }
+      .spin-slow {
+        -webkit-animation: spin 1.6s linear infinite;
+         -moz-animation: spin 1.6s linear infinite;
+         animation: spin 1.6s linear infinite;
+      }
+      .spin-extra-slow {
+        -webkit-animation: spin 2s linear infinite;
+         -moz-animation: spin 2s linear infinite;
+         animation: spin 2s linear infinite;
+      }
+      .spin-extra-extra-slow {
+        -webkit-animation: spin 3s linear infinite;
+         -moz-animation: spin 3s linear infinite;
+         animation: spin 3s linear infinite;
+      }
+      @-moz-keyframes spin { 100% { -moz-transform: rotate(-360deg); } }
+      @-webkit-keyframes spin { 100% { -webkit-transform: rotate(-360deg); } }
+      @keyframes spin { 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); } }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+            <li><a href="/about">About</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+      <div class="container">
+        <div class="page-header">
+          <div id="windmill-animation">
+             <img id="blades" src="/img/windmill-blades.png" alt="windspeed">
+             <img id="base" src="/img/windmill-base.png" alt="windspeed">
+          </div>
+          <h1>Home Weather Station</h1>
+          
+              <p> <span style="color:grey;">Updated</span> <span class="currentdate">................................</span> CST</p>
+<!--               <button type="button" class="btn btn-primary" onclick="clearTimeout(timer);get_current_data();">Update Now</button> -->
+        </div>
+        
+        <div class="row">
+          
+          <div class='col-sm-6'>
+            <div class='panel panel-info'>
+              <div class='panel-heading'>
+                <h3>Temperature</h3>
+                <span id="currenttemperature" class="flashtext"></span> F
+                <p id="currentwindchill" class="flashtext"></p>
+              </div>
+            </div>
+          </div>
+          
+           <div class='col-sm-6'>
+            <div class='panel panel-warning'>
+              <div class='panel-heading'>
+                <h3>Wind Speed</h3>            
+                <span id='currentspeed' class="flashtext"></span>mi/hr
+              </div>
+            </div>
+          </div>   
+          
+        </div>
+        
+        <div class="row">
+          <div class="col-sm-12">
+            <div class='panel panel-default'>
+              <div class="panel-heading">
+                <h3>History</h3>
+                <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Hour
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a>Hour</a></li>
+                    <li><a>Day</a></li>
+                    <li><a>Week</a></li>
+                    <li><a>Month</a></li>
+                    <li><a>Year</a></li>
+                  </ul>
+                </div>
+                <div class="chart-container" style="position: relative; height:370px; width:100%">
+                  <canvas id="dataChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+    <script type="text/javascript">
+$(document).ready(function(){
+  var timer; // create timer for automatic page refresh
+  
+  // Get current weather data using the "Hour" scope
+  new get_current_data($(".dropdown-menu li a").first().text());
+  $(".dropdown-menu li a").click(function(){
+      $(".btn:first-child").text($(this).text()).append(' <span class="caret"></span>');
+      $(".btn:first-child").val($(this).text());
+  
+      create_data_chart($(this).text()); // create history chart
+  });
+ });
+
+// Get Current Windspeed and Temperature
+function get_current_data(scope){
+  $.ajax({
+          type: "POST",
+          url: "database/get_current_data.php",
+          async: false
+      }).success(function(data){
+          var obj = $.parseJSON(data);
+          var blades = $('#blades');
+          var speed = obj[0]['windspeed'];
+    
+          $(blades).removeClass();
+    
+          if (speed <= 1)
+          {
+             $('#currentspeed').html("0");
+          }
+          else if (speed > 1 && speed <= 4)
+          {
+             $('#currentspeed').html(obj[0]['windspeed']);
+             $(blades).addClass('spin-extra-extra-slow');
+          }
+          else if (speed > 4 && speed <= 8)
+          {
+             $('#currentspeed').html(obj[0]['windspeed']);
+             $(blades).addClass('spin-extra-slow');
+          }
+          else if (speed > 8 && speed <= 12)
+          {
+             $('#currentspeed').html(obj[0]['windspeed']);
+             $(blades).addClass('spin-slow');
+          }
+          else if (speed > 12 && speed <= 16)
+          {
+             $('#currentspeed').html(obj[0]['windspeed']);
+             $(blades).addClass('spin-medium');
+          }
+          else if (speed > 16 && speed <= 20)
+          {
+             $('#currentspeed').html(obj[0]['windspeed']);
+             $(blades).addClass('spin-fast');
+          }
+          else if (speed > 20)
+          {
+             $('#currentspeed').html(obj[0]['windspeed']);
+             $(blades).addClass('spin-extra-fast');
+          }
+    
+          $('#currenttemperature').html(obj[0]['temperature']);
+          $('#currentwindchill').html('');
+          
+          if (obj[0]['windspeed'] > 3 && obj[0]['temperature'] < 50) {
+            var windchill = 35.74 + (0.6215 * obj[0]['temperature']) - (35.75 * Math.pow(obj[0]['windspeed'], 0.16))  + (0.4275 * obj[0]['temperature'] * Math.pow(obj[0]['windspeed'], 0.16 ));
+            $('#currentwindchill').html('FEELS LIKE<br><span style="font-size:3em;"> ' + windchill.toFixed(2) + "</span> F");
+          }
+    
+          $('.currentdate').html(obj[0]['logdate']);
+    
+          $('.flashtext, .currentdate, #windmill-animation').css('opacity','.2');
+
+          setTimeout(function(){
+            $('.flashtext, .currentdate, #windmill-animation').css('opacity','1');
+          }, 700);
+          
+          // make history chart
+          create_data_chart(scope);
+    
+          // set page to refresh every 74 seconds
+          timer = setTimeout(function(){get_current_data(scope);}, 1000*74);
+      }).responseText;
+}
+
+// Get data for history chart
+function create_data_chart(scope) {
+  var ctx = document.getElementById("dataChart");
+  
+  if (ctx.chart){
+    ctx.chart.destroy();
+  }
+  $.ajax({
+    url : "database/get_chart_data.php",
+    type : "POST",
+    data: {
+      scope: scope
+    },
+    success : function(data) {
+        var obj = $.parseJSON(data);
+      
+        var logdates = [];
+        $.each(obj, function(i, item) {
+            logdates.push(obj[i]['logdate']);
+        });
+      
+        var windspeeds = [];
+        $.each(obj, function(i, item) {
+            windspeeds.push(parseFloat(obj[i]['windspeed']).toFixed(2));
+        });
+      
+        var temperatures = [];
+        $.each(obj, function(i, item) {
+            temperatures.push(parseFloat(obj[i]['temperature']).toFixed(2));
+        });
+      
+         // destroy old chart
+        ctx.chart && ctx.chart.destroy();
+        
+        var dataChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: logdates,
+              datasets: [{
+                  label: 'Wind Speed (mi/hr)',
+                  data: windspeeds,
+                  backgroundColor: '#8A6D3F',
+                  borderColor: '#8A6D3F',
+                  borderWidth: 2,
+                  fill: 'true',
+                  pointRadius: 2
+              },{
+                  label: 'Temerature (F)',
+                  data: temperatures,
+                  backgroundColor: '#31708F',
+                  borderColor: '#31708F',
+                  borderWidth: 2,
+                  fill: 'true',
+                  pointRadius: 2
+              }
+                        ]
+          },
+          options: {
+            maintainAspectRatio: false,
+              scales: {
+                  yAxes: {
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "left",
+                        id: "y-axis-1",
+                    },
+              }
+          }
+      });
+      ctx.chart = dataChart;
+    },
+    error : function(data) { 
+    }
+  })
+}
+</script>
+  </body>
+</html>

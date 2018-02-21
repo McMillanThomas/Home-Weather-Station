@@ -1,0 +1,5 @@
+error_log
+database/config.php
+database/error_log
+esp8266/credentials.h
+.old.wordpress
