@@ -20,7 +20,7 @@
   const char* password = "";
  */
 #include "credentials.h"
-int sleeptime = 60; // seconds to sleep
+int sleeptime = 30; // seconds to sleep
 const char* host = "weather.mcmillanthomas.com";
 
 // Variables
@@ -34,7 +34,7 @@ float temp = 22.00;
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 
 void setup() {
-  Serial.begin(115200);
+  // Serial.begin(115200);
   pinMode(ECHOPIN, INPUT);
   pinMode(TRIGPIN, OUTPUT);
 
@@ -43,16 +43,15 @@ void setup() {
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
+    //Serial.print(".");
   }
-  Serial.println("");
-  Serial.println("WiFi connected");
+  //Serial.println("");
+  //Serial.println("WiFi connected");
 
   // Get Windspeed
   int i;
   int n = 300;
-  for (i = 0; i < n; i++) { 
-    // Serial.println(i);   
+  for (i = 0; i < n; i++) {   
     digitalWrite(TRIGPIN, LOW); // Set the trigger pin to low for 2uS
     delayMicroseconds(2);
     digitalWrite(TRIGPIN, HIGH); // Send a 10uS high to trigger ranging
@@ -79,12 +78,11 @@ void setup() {
   // Make sure the sensor is found, you can also pass in a different i2c
   // address with tempsensor.begin(0x19) for example
   if (!tempsensor.begin()) {
-    Serial.println("Couldn't find MCP9808!");
+    //Serial.println("Couldn't find MCP9808!");
     while (1);
   }
   tempsensor.wake();   // wake up, ready to read!
   temp = tempsensor.readTempC();
-  Serial.print(temp);
   tempsensor.shutdown(); // shutdown MSP9808 - power consumption ~0.1 mikro Ampere
 
   // Send Data over Wifi

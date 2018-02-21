@@ -110,7 +110,6 @@
           <h1>Home Weather Station</h1>
           
               <p> <span style="color:grey;">Updated</span> <span class="currentdate">................................</span> CST</p>
-<!--               <button type="button" class="btn btn-primary" onclick="clearTimeout(timer);get_current_data();">Update Now</button> -->
         </div>
         
         <div class="row">
@@ -167,7 +166,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
     <script type="text/javascript">
 $(document).ready(function(){
-  var timer; // create timer for automatic page refresh
   
   // Get current weather data using the "Hour" scope
   new get_current_data($(".dropdown-menu li a").first().text());
@@ -246,8 +244,9 @@ function get_current_data(scope){
           // make history chart
           create_data_chart(scope);
     
-          // set page to refresh every 74 seconds
-          timer = setTimeout(function(){get_current_data(scope);}, 1000*74);
+          // set page to refresh every 34 seconds
+          var pageRefreshTime = 34;
+          var timer = setTimeout(function(){get_current_data(scope);}, 1000 * pageRefreshTime);
       }).responseText;
 }
 
