@@ -40,27 +40,91 @@
       <div class="container">
         <div class="page-header">
           <h1>About</h1>
-        </div>
+        </div>        
+             <h3>
+          What is it?
+        </h3>
+        <p>
+          This is a DIY project to measure and display temperature and windspeed. A homemade unit with sensors records and uploads the data, which is accessable to anyone via a web browser.
+        </p>
+
         
+        
+          <h3>
+              How does it work?
+            </h3>
+        <p>
+          The unit – pictured below – is mounted behind windmill blades. 
+        </p>
+
         <div class="row">
-          <div class="col-sm-3">
-            <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-5.jpg" class="img-thumbnail" alt="Responsive image">
+          <div class="col-sm-6">
+            <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-4.jpg" class="img-thumbnail" alt="image">
           </div>
-          
-          <div class="col-sm-3">
-            <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-2.jpg" class="img-thumbnail" alt="Responsive image">
-          </div>
-          
-          <div class="col-sm-3">
-            <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-4.jpg" class="img-thumbnail" alt="Responsive image">
-          </div>
-          
-          <div class="col-sm-3">
-            <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-1.jpg" class="img-thumbnail" alt="Responsive image">
+          <div class="col-sm-6">
+             <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-5.jpg" class="img-thumbnail" alt="image">
           </div>
         </div>
         
-      </div>
+        <br>
+        <br>
+      <p>
+        Inside the unit is:
+        
+        <br>
+        - A microcontroler (<a href="https://learn.adafruit.com/adafruit-feather-huzzah-esp8266" target="_blank">Adafruit Feather Huzzah</a>)
+        <br>
+        - A temperature sensor (<a href="https://learn.adafruit.com/adafruit-mcp9808-precision-i2c-temperature-sensor-guide/overview" target="_blank">Adafruit MCP9808</a>)
+        <br>
+        - An ultrasonic sensor (<a href="http://www.microcenter.com/product/476331/HC-SR05_Ultrasonic_Sensor" target="_blank">HC-SR0</a>)
+        <br>
+        - A power jack (and a potenometer to reduce the voltage)
+        <br>
+        
+                <div class="row">
+          <div class="col-sm-6">
+            <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-1.jpg" class="img-thumbnail" alt="image">
+          </div>
+          
+          <div class="col-sm-6">
+            <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-2.jpg" class="img-thumbnail" alt="image">
+          </div>
+        </div>
+        
+        <br>
+        Power comes from a 5C DC Adapter. 
+        <br>
+        <br>
+        Every 30 seconds, the unit records data and sends it over wifi. This website displays the data <a href="http://weather.mcmillanthomas.com" target="">here</a>.
+        
+        <br>
+        <br>
+        The windspeed is calculated using the ultrasonic sensor, which measures how many times a blade passes in front of it. 
+        
+        <br>
+        <br>On the website, the windmill blades spin faster or slower based on the actual windspeed.
+        <br>
+        <br>
+        The unit's program runs on an Arduino microcontroler, and the website was built using <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>.
+        <br>
+        <br>
+         <a href="https://github.com/McMillanThomas/Home-Weather-Station" target="_blank"><button class="btn btn-primary">View Project Code on GitHub</button></a>
+        
+        <br>
+        <br>
+        <h3>
+          Contact
+        </h3>
+        thomas [at] mcmillanthomas [dot] com
+        <br>
+        <br>
+        Design portfolio at <a href="http://mcmillanthomas.com" target="_blank">mcmillanthomas.com</a>
+        </p>
+        <br>
+        <br>
+
+        
+        </div>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
