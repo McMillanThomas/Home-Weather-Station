@@ -46,7 +46,7 @@ $result = mysqli_query($conn, "SELECT ID, logdate, windspeed, ROUND(temperature 
 FROM DataTable
 WHERE logdate BETWEEN '$endrange' AND '$startrange'
 AND ID % '$granularity' = 0
-ORDER BY ID DESC");
+ORDER BY ID ASC");
 
 // Output array to Json Object
 $output = array();

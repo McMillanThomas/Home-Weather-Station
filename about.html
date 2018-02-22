@@ -1,5 +1,15 @@
 <html>  
-  <head>      
+  <head>   
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-36561164-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-36561164-2');
+    </script>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,12 +36,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
+          <a href="/" class="navbar-brand">Home Weather Station</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/">Home</a></li>
+            <li><a href="/">Weather</a></li>
             <li class="active"><a href="#">About <span class="sr-only">(current)</span></a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
@@ -45,7 +56,7 @@
           What is it?
         </h3>
         <p>
-          This is a DIY project to measure and display temperature and windspeed. A homemade unit with sensors records and uploads the data, which is accessable to anyone via a web browser.
+          This is a DIY project to measure and display temperature and windspeed. A homemade sensor unit records and uploads the data, which is accessable via web browser.
         </p>
 
         
@@ -54,22 +65,27 @@
               How does it work?
             </h3>
         <p>
-          The unit – pictured below – is mounted behind windmill blades. 
+          The weather station – pictured below – is mounted behind windmill blades. 
         </p>
 
         <div class="row">
           <div class="col-sm-6">
             <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-4.jpg" class="img-thumbnail" alt="image">
+            <em>
+              The sensors are housed in a wooden box about 10 x 10 cm. Pulling the tab opens the box.
+            </em>
           </div>
           <div class="col-sm-6">
              <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-5.jpg" class="img-thumbnail" alt="image">
+            <em>
+              The box attaches with velcro behind the windmill blades. 
+            </em>
           </div>
         </div>
         
         <br>
-        <br>
       <p>
-        Inside the unit is:
+        <b>Inside the Weather Station</b>
         
         <br>
         - A microcontroler (<a href="https://learn.adafruit.com/adafruit-feather-huzzah-esp8266" target="_blank">Adafruit Feather Huzzah</a>)
@@ -78,34 +94,69 @@
         <br>
         - An ultrasonic sensor (<a href="http://www.microcenter.com/product/476331/HC-SR05_Ultrasonic_Sensor" target="_blank">HC-SR0</a>)
         <br>
-        - A power jack (and a potenometer to reduce the voltage)
+        - A power jack (and a potentiometer to reduce the voltage)
         <br>
         
                 <div class="row">
           <div class="col-sm-6">
             <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-1.jpg" class="img-thumbnail" alt="image">
+             <em>
+              The electronics are held in place because the ultrasonic sensor fits tightly into the two cut holes. (A smaller, better fitting container could also be used.)
+            </em>
           </div>
           
           <div class="col-sm-6">
             <img src="/img/design/mcmillanthomas-arduino-home-weather-station-2018-2.jpg" class="img-thumbnail" alt="image">
+            <em>
+              The Arduino board takes 3-6V to run.
+            </em>
           </div>
         </div>
         
         <br>
-        Power comes from a 5C DC Adapter. 
+        <b>Power</b>
+        <br>
+        Electricity is supplied through a 5V DC Adapter. The unit saves power by sleeping and only waking every 30 seconds to record and send weather data.
         <br>
         <br>
-        Every 30 seconds, the unit records data and sends it over wifi. This website displays the data <a href="http://weather.mcmillanthomas.com" target="">here</a>.
+        <b>Calculating the Windspeed</b>
+        <br>The windspeed is calculated using the ultrasonic sensor.
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-sm-6">
+            <img src="/img/mcmillanthomas-ultrasonic-sensor-response.jpg" class="img-thumbnail" alt="image">
+          </div>
+          <div class="col-sm-6">
+            <img src="/img/mcmillanthomas-ultrasonic-sensor-no-response.jpg" class="img-thumbnail" alt="image">
+          </div>
+        </div>        
+        <br>
+        <p>
+           The ultrasonic sensor sends a signal every 2 milliseconds. If a windmill blade is in front of the sensor, the sensor receives and records a response. By adding how many responses the sensor recieves per 300 signals sent, the windspeed can be calculated.
+          <br>
+          <br>
+          <em>
+            windspeed = (number of blade passes) x (conversion constant)
+            </em>
+          <br>
+          <br>
+          To enable calculating even slow windspeeds – where a blade might be in front of the sensor for more than 2 milliseconds – a new response is recorded only if the previous signal did not return a response.
+        </p>
+        <br>
+        <b>Data Transmition</b>
+        <br>
+        The weather station connects to a local wifi network and transmits the windspeed, temperature and a timestamp to a MySQL database.
+        <br>
+        <br>
         
+        <b>Website</b>
+        <br>On the website, the windmill image's blades spin faster or slower based on the actual windspeed. Every 34 seconds the website updates with new data from the database. 
         <br>
         <br>
-        The windspeed is calculated using the ultrasonic sensor, which measures how many times a blade passes in front of it. 
-        
+        <b>Code</b>
         <br>
-        <br>On the website, the windmill blades spin faster or slower based on the actual windspeed.
-        <br>
-        <br>
-        The unit's program runs on an Arduino microcontroler, and the website was built using <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>.
+        The weather station code runs on an Arduino microcontroler, and the website was built using <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>.
         <br>
         <br>
          <a href="https://github.com/McMillanThomas/Home-Weather-Station" target="_blank"><button class="btn btn-primary">View Project Code on GitHub</button></a>

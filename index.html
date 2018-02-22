@@ -1,5 +1,15 @@
 <html>  
-  <head>      
+  <head>  
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-36561164-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-36561164-2');
+    </script>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -90,12 +100,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
+          <a href="/" class="navbar-brand">Home Weather Station</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+            <li class="active"><a href="/">Weather <span class="sr-only">(current)</span></a></li>
             <li><a href="/about">About</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
@@ -107,7 +118,7 @@
              <img id="blades" src="/img/windmill-blades.png" alt="windspeed">
              <img id="base" src="/img/windmill-base.png" alt="windspeed">
           </div>
-          <h1>Home Weather Station</h1>
+          <h1>Weather</h1>
           
               <p> <span style="color:grey;">Updated</span> <span class="currentdate">................................</span> CST</p>
         </div>
@@ -145,10 +156,10 @@
                   <span class="caret"></span></button>
                   <ul class="dropdown-menu">
                     <li><a>Hour</a></li>
-                    <li><a>Day</a></li>
-                    <li><a>Week</a></li>
-                    <li><a>Month</a></li>
-                    <li><a>Year</a></li>
+                    <li class="disabled"><a>Day</a></li>
+                    <li class="disabled"><a>Week</a></li>
+                    <li class="disabled"><a>Month</a></li>
+                    <li class="disabled"><a>Year</a></li>
                   </ul>
                 </div>
                 <div class="chart-container" style="position: relative; height:370px; width:100%">
