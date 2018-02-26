@@ -4,16 +4,23 @@
     Ultrasonic Sensor (to measure windspeed from passing blades)
     Temperature sensor
   Sends data to web server over wifi
+
+  Board: Adafruit Huzzah ESP8266
 */
 
 // Libraries
 #include <ESP8266WiFi.h>
 #include <Wire.h>
 #include <Adafruit_MCP9808.h>
+#include "DHTesp.h"
+
+DHTesp dht;
 
 // Constants
 #define ECHOPIN 12 // Pin to receive echo pulse
 #define TRIGPIN 15 // Pin to send trigger pulse
+#define HUMIDPIN 14 // Pin for humidity reading
+
 /*
   Wifi Variables (included in credentials.h)
   const char* ssid     = "";
@@ -34,23 +41,25 @@ float temp = 22.00;
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 
 void setup() {
-  // Serial.begin(115200);
+  Serial.begin(115200);
   pinMode(ECHOPIN, INPUT);
   pinMode(TRIGPIN, OUTPUT);
+  dht.setup(HUMIDPIN);
 
   // Connect to Wifi Network
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    //Serial.print(".");
+    Serial.print(".");
   }
-  //Serial.println("");
-  //Serial.println("WiFi connected");
+  Serial.println("");
+  Serial.println("WiFi connected");
 
   // Get Windspeed
   int i;
   int n = 300;
+  bladePassCounter = 0;
   for (i = 0; i < n; i++) {   
     digitalWrite(TRIGPIN, LOW); // Set the trigger pin to low for 2uS
     delayMicroseconds(2);
@@ -78,12 +87,16 @@ void setup() {
   // Make sure the sensor is found, you can also pass in a different i2c
   // address with tempsensor.begin(0x19) for example
   if (!tempsensor.begin()) {
-    //Serial.println("Couldn't find MCP9808!");
+    Serial.println("Couldn't find MCP9808!");
     while (1);
   }
   tempsensor.wake();   // wake up, ready to read!
   temp = tempsensor.readTempC();
   tempsensor.shutdown(); // shutdown MSP9808 - power consumption ~0.1 mikro Ampere
+
+  // Get Humidity
+  float humidity = dht.getHumidity();
+  float temp2 = dht.getTemperature();
 
   // Send Data over Wifi
   // Use WiFiClient class to create TCP connections
@@ -95,14 +108,12 @@ void setup() {
   
   String url = "/database/receiver.php";
 
-  windspeed = (bladePassCounter * .60); //calculates the wind speed (in mi/hr)
   // This will send the request to the server
-  client.print(String("GET ") + url + "?windspeed=" + windspeed + "&temperature=" + temp + " HTTP/1.1\r\n" +
+  client.print(String("GET ") + url + "?windspeed=" + bladePassCounter + "&temperature=" + temp + "&humidity=" + humidity + "&temperature2=" + temp2 + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
                "Connection: close\r\n\r\n");
-               
-  bladePassCounter = 0;
 
+  Serial.println("Going into deep sleep");
   // Sleep for sleeptime seconds
   ESP.deepSleep(sleeptime * 1000000);
 }

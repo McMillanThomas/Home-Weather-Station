@@ -9,9 +9,10 @@ if ($conn->connect_error) {
 }
 
 //get current data
-$sql_current = "SELECT dt2.ID, dt2.logdate, ROUND(AVG(dt1.windspeed),2) AS windspeed, ROUND(dt2.temperature * 9/5 + 29, 2) AS temperature
-FROM (SELECT `windspeed`, ID FROM DataTable ORDER BY ID DESC LIMIT 2) dt1
-LEFT JOIN DataTable dt2 ON dt1.ID = dt2.ID";
+$sql_current = "SELECT ID, logdate, ROUND(windspeed,2) AS windspeed, ROUND(temperature * 9/5 + 32, 2) AS temperature
+FROM DataTable
+ORDER BY ID DESC
+LIMIT 1";
 
 $result_current = mysqli_query( $conn , $sql_current );
 

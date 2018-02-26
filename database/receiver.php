@@ -13,10 +13,14 @@ if ( array_key_exists( 'windspeed' , $data ) ) {
   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
   $datenow = $now->format('Y-m-d H:i:s');
-  $windspeed  = $data['windspeed'] * 1.2;
-  $temperature = $data['temperature'];
+  $windspeed = ($data['windspeed'] <= 1 ? 0 : $data['windspeed'] * .72);
+  $temperature = $data['temperature'] - 1.7;
+    
+  // These next two values are from the DHT11 Sensor
+  $humidity = $data['humidity'];
+  $temperature2 = $data['temperature2'] - 1.7;
   
-  $sql = "INSERT INTO DataTable (logdate, windspeed, temperature) VALUES ('$datenow', '$windspeed', '$temperature')";
+  $sql = "INSERT INTO DataTable (logdate, windspeed, temperature, humidity, temperature2) VALUES ('$datenow', '$windspeed', '$temperature', '$humidity', '$temperature2')";
 
   // Prepare statement
   $stmt = $conn->prepare($sql);
