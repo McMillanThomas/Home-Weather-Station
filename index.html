@@ -255,8 +255,8 @@ function get_current_data(scope){
           // make history chart
           create_data_chart(scope);
     
-          // set page to refresh every 34 seconds
-          var pageRefreshTime = 34;
+          // set page to refresh every 36 seconds
+          var pageRefreshTime = 36;
           var timer = setTimeout(function(){get_current_data(scope);}, 1000 * pageRefreshTime);
       }).responseText;
 }

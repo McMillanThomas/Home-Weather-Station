@@ -27,7 +27,6 @@ DHTesp dht;
   const char* password = "";
  */
 #include "credentials.h"
-int sleeptime = 30; // seconds to sleep
 const char* host = "weather.mcmillanthomas.com";
 
 // Variables
@@ -42,6 +41,12 @@ Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 
 void setup() {
   Serial.begin(115200);
+  Serial.setTimeout(2000);
+
+  // Wait for serial to initialize.
+  while (!Serial) { }
+
+  
   pinMode(ECHOPIN, INPUT);
   pinMode(TRIGPIN, OUTPUT);
   dht.setup(HUMIDPIN);
@@ -113,10 +118,10 @@ void setup() {
                "Host: " + host + "\r\n" +
                "Connection: close\r\n\r\n");
 
-  Serial.println("Going into deep sleep");
-  // Sleep for sleeptime seconds
-  ESP.deepSleep(sleeptime * 1000000);
+  Serial.println("Going into deep sleep for 30 seconds");
+  ESP.deepSleep(30e6); // 30e6 is 30 seconds
 }
 
 void loop() {
+   
 }
