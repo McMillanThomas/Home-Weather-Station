@@ -17,14 +17,13 @@
     <title>Home Weather Station</title>
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/js/date.js"></script>
 
     <style>
       .flashtext {
         font-size:7em;
         font-weight:bold;
-      }
-      .currentdate {
-        font-size:1.2em;
       }
       #currentwindchill {
         font-size:1em; !important
@@ -34,7 +33,7 @@
         font-weight:bold;
       }
       #windmill-animation {
-        top: 13px;
+        top: 29px;
         position: relative;
         opacity:.2;
       }
@@ -120,7 +119,7 @@
           </div>
           <h1>Weather</h1>
           
-              <p> <span style="color:grey;">Updated</span> <span class="currentdate">................................</span> CST</p>
+              <p><span id="power-status-text" style="color:#31708f;">........</span> <br> <span style="color:grey;">Updated <span class="currentdate">................................</span> CST</span></p>
         </div>
         
         <div class="row">
@@ -244,12 +243,32 @@ function get_current_data(scope){
             $('#currentwindchill').html('FEELS LIKE<br><span style="font-size:3em;"> ' + windchill.toFixed(2) + "</span> F");
           }
     
+          // check power status
+          // if charging
+          if (obj[0]['charging'] == 0 && obj[0]['charged'] == 1) {
+            $('#power-status-text').html('<i class="fas fa-sun"></i> Battery Charging');
+          }
+          // if charged
+          if (obj[0]['charging'] == 1 && obj[0]['charged'] == 0) {
+            $('#power-status-text').html('<i class="fas fa-sun"></i> Battery Charged');
+          }
+          // if battery
+          if (obj[0]['charging'] == 1 && obj[0]['charged'] == 1) {
+            $('#power-status-text').html('<i class="fas fa-battery-half"></i> Battery On');
+          }
+          //if dead (no logdate in the past 120 seconds)
+          var time = new Date($.now());
+          var dif = time - Date.parse(obj[0]['logdate']);
+          if (dif > 120000) {
+            $('#power-status-text').html('<i class="far fa-moon"></i> Battery Dead');
+          }
+    
           $('.currentdate').html(obj[0]['logdate']);
     
-          $('.flashtext, .currentdate, #windmill-animation').css('opacity','.2');
+          $('.flashtext, .currentdate, #windmill-animation, #power-status, #power-status-text').css('opacity','.2');
 
           setTimeout(function(){
-            $('.flashtext, .currentdate, #windmill-animation').css('opacity','1');
+            $('.flashtext, .currentdate, #windmill-animation, #power-status, #power-status-text').css('opacity','1');
           }, 700);
           
           // make history chart

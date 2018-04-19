@@ -12,14 +12,12 @@
 #include <ESP8266WiFi.h>
 #include <Wire.h>
 #include <Adafruit_MCP9808.h>
-#include "DHTesp.h"
-
-DHTesp dht;
 
 // Constants
 #define ECHOPIN 12 // Pin to receive echo pulse
 #define TRIGPIN 15 // Pin to send trigger pulse
-#define HUMIDPIN 14 // Pin for humidity reading
+#define CHARGING 14
+#define CHARGED 13
 
 /*
   Wifi Variables (included in credentials.h)
@@ -35,6 +33,8 @@ int lastButtonState = 0;     // previous state of the button
 bool bladePassing = false;
 float windspeed = 0.00;
 float temp = 22.00;
+bool charging = 1;
+bool charged = 0;
 
 // Create the MCP9808 temperature sensor object
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
@@ -49,7 +49,8 @@ void setup() {
   
   pinMode(ECHOPIN, INPUT);
   pinMode(TRIGPIN, OUTPUT);
-  dht.setup(HUMIDPIN);
+  pinMode(CHARGING, INPUT_PULLUP);
+  pinMode(CHARGED, INPUT_PULLUP);
 
   // Connect to Wifi Network
   WiFi.begin(ssid, password);
@@ -60,6 +61,11 @@ void setup() {
   }
   Serial.println("");
   Serial.println("WiFi connected");
+
+  // Get Charging Status
+  charging = digitalRead(CHARGING);
+  charged = digitalRead(CHARGED);
+  
 
   // Get Windspeed
   int i;
@@ -99,9 +105,6 @@ void setup() {
   temp = tempsensor.readTempC();
   tempsensor.shutdown(); // shutdown MSP9808 - power consumption ~0.1 mikro Ampere
 
-  // Get Humidity
-  float humidity = dht.getHumidity();
-  float temp2 = dht.getTemperature();
 
   // Send Data over Wifi
   // Use WiFiClient class to create TCP connections
@@ -114,7 +117,7 @@ void setup() {
   String url = "/database/receiver.php";
 
   // This will send the request to the server
-  client.print(String("GET ") + url + "?windspeed=" + bladePassCounter + "&temperature=" + temp + "&humidity=" + humidity + "&temperature2=" + temp2 + " HTTP/1.1\r\n" +
+  client.print(String("GET ") + url + "?windspeed=" + bladePassCounter + "&temperature=" + temp + "&charging=" + charging  + "&charged=" + charged + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
                "Connection: close\r\n\r\n");
 

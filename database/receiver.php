@@ -15,12 +15,14 @@ if ( array_key_exists( 'windspeed' , $data ) ) {
   $datenow = $now->format('Y-m-d H:i:s');
   $windspeed = ($data['windspeed'] <= 1 ? 0 : $data['windspeed'] * .68);
   $temperature = $data['temperature'] - 4.7;
+  $charging = $data['charging'];
+  $charged = $data['charged'];
     
   // These next two values are from the DHT11 Sensor
   $humidity = $data['humidity'];
   $temperature2 = $data['temperature2'] - 4.7;
   
-  $sql = "INSERT INTO DataTable (logdate, windspeed, temperature, humidity, temperature2) VALUES ('$datenow', '$windspeed', '$temperature', '$humidity', '$temperature2')";
+  $sql = "INSERT INTO DataTable (logdate, windspeed, temperature, charging, charged) VALUES ('$datenow', '$windspeed', '$temperature', '$charging', '$charged')";
 
   // Prepare statement
   $stmt = $conn->prepare($sql);
